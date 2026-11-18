@@ -26,7 +26,7 @@ The verteces must be provided by their spatial coordinates, with $z$ going upwar
 
 Any lines after the input will be treated as comments, as they won't be read by the program. An example is provided below.
 
-```txt
+```text
 8
 1 1 -1
 1 -1 -1
