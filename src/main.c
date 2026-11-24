@@ -10,7 +10,7 @@
 #define MAX_EDGES 512
 
 #define L 75
-#define SCALE_FACTOR 95
+#define SCALE_FACTOR 75
 
 #define INCLINATION PI / 3
 
@@ -126,23 +126,23 @@ void DrawCubeAtAngle(Vector3 A, Vector3 B, Vector3 C, Vector3 D, Vector3 E, Vect
     g = transform(G, i, j);
     h = transform(H, i, j);
 
-    a.x += WIDTH/2;
-    b.x += WIDTH/2;
-    c.x += WIDTH/2;
-    d.x += WIDTH/2;
-    e.x += WIDTH/2;
-    f.x += WIDTH/2;
-    g.x += WIDTH/2;
-    h.x += WIDTH/2;
+    a.x += (float)WIDTH/2;
+    b.x += (float)WIDTH/2;
+    c.x += (float)WIDTH/2;
+    d.x += (float)WIDTH/2;
+    e.x += (float)WIDTH/2;
+    f.x += (float)WIDTH/2;
+    g.x += (float)WIDTH/2;
+    h.x += (float)WIDTH/2;
 
-    a.y += HEIGHT/2;
-    b.y += HEIGHT/2;
-    c.y += HEIGHT/2;
-    d.y += HEIGHT/2;
-    e.y += HEIGHT/2;
-    f.y += HEIGHT/2;
-    g.y += HEIGHT/2;
-    h.y += HEIGHT/2;
+    a.y += (float)HEIGHT/2;
+    b.y += (float)HEIGHT/2;
+    c.y += (float)HEIGHT/2;
+    d.y += (float)HEIGHT/2;
+    e.y += (float)HEIGHT/2;
+    f.y += (float)HEIGHT/2;
+    g.y += (float)HEIGHT/2;
+    h.y += (float)HEIGHT/2;
 
     // DrawCircle(a.x, a.y, 1, RAYWHITE);
     // DrawCircle(b.x, b.y, 1, RAYWHITE);
@@ -181,8 +181,8 @@ void DrawMeshAtAngle(Vector3 *verteces, int vertex_count, Edge *edges, int edge_
     for (int v = 0; v < vertex_count; v++) {
         points[v] = transform(verteces[v], i, j);
 
-        points[v].x += WIDTH / 2;
-        points[v].y += HEIGHT / 2;
+        points[v].x += (float)WIDTH / 2;
+        points[v].y += (float)HEIGHT / 2;
     }
 
     for (int l = 0; l < edge_count; l++) {
@@ -203,9 +203,14 @@ int main(int argc, char **argv) {
     SetTargetFPS(60);
 
     float angle = 0;
+    float speed = 1;
 
-    if (argc == 2) {
+    if (argc >= 2) {
         // good
+
+        if (argc > 2) {
+            sscanf(argv[2], "%f", &speed);
+        }
 
         Vector3 verteces[MAX_VERTECES];
         Edge edges[MAX_EDGES];
@@ -221,7 +226,7 @@ int main(int argc, char **argv) {
 
             ClearBackground(BLACK);
 
-            angle += 0.01;
+            angle += (0.01 * speed);
             DrawMeshAtAngle(verteces, numVert, edges, numEdge, angle);
 
             EndDrawing();
