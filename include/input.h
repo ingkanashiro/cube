@@ -8,7 +8,7 @@
 
 typedef struct data {    
     char *mesh;
-    float speed, acceleration, delta;
+    float speed, acceleration, delta, phase, zoom_level;
     int clone;
 
     int window_size;

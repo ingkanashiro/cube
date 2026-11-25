@@ -52,6 +52,8 @@ int readInputFrom(int argc, char **argv, Data *data) {
         1,
         0,
         0,
+        0,
+        1,
         1,
         480
     };
@@ -97,6 +99,41 @@ int readInputFrom(int argc, char **argv, Data *data) {
                 // delta: the variation in starting speed per clone
                 if (sscanf(argv[i+1], "%f", &(temp.delta)) != 1) {
                     printf("syntax error: unexpected argument type for flag '-d'. expected float.\n");
+                    return 0;
+                }
+                break;
+
+            case 'p':
+                // phase: the fraction of starting rotation (0 == 1)
+                if (sscanf(argv[i+1], "%f", &(temp.phase)) != 1) {
+                    printf("syntax error: unexpected argument type for flag '-p'. expected float.\n");
+                    return 0;
+                }
+
+                if (temp.phase >= 1 || temp.phase < 0) {
+                    float starting_phase = temp.phase;
+
+                    while (starting_phase >= 1) {
+                        starting_phase--;
+                    }
+
+                    while (starting_phase < 0) {
+                        starting_phase++;
+                    }
+                    
+                    printf(
+                        "warning: phase expected float in range 0..1 (1 exclusive), but got %f. phase will be normalised to %f\n",
+                        temp.phase,
+                        starting_phase
+                    );
+
+                    temp.phase = starting_phase;
+                }
+                break;
+
+            case 'z':
+                if (sscanf(argv[i+1], "%f", &(temp.zoom_level)) != 1) {
+                    printf("syntax error: unexpected argument type for flag '-z'. expected float.\n");
                     return 0;
                 }
                 break;
