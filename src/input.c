@@ -82,8 +82,6 @@ int readInputFrom(int argc, char **argv, Data *data) {
                         buffer[v] = '\0';
                         temp.mesh[count] = strdup(buffer);
 
-                        printf("str%d: %s\n", count, buffer);
-
                         count++;
                         break;
                     }
