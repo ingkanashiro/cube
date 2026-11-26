@@ -51,8 +51,6 @@ int renderMesh(Data data) {
 
         CubeMesh *meshArray = calloc(64, sizeof(CubeMesh));
 
-        printf("shapes: %d\n", data.shape_count);
-
         for (int iter = 0; iter < data.shape_count; iter++) {
 
             Vector3 *verteces = calloc(MAX_VERTECES, sizeof(Vector3));
@@ -65,8 +63,6 @@ int renderMesh(Data data) {
                 return 1;
             }
             
-            printf("mesh %d -> verteces = %d, edges = %d\n\n", iter, numVert, numEdge);
-
             for (int i = 0; i < numVert; i++) {
                 verteces[i] = scale(verteces[i], data.zoom_level);
             }
