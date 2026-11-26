@@ -1,6 +1,6 @@
 #include "../include/square.h"
 
-void DrawCubeAtAngle(Vector3 A, Vector3 B, Vector3 C, Vector3 D, Vector3 E, Vector3 F, Vector3 G, Vector3 H, float angle, float window_size) {
+void DrawCubeAtAngle(Vector3 A, Vector3 B, Vector3 C, Vector3 D, Vector3 E, Vector3 F, Vector3 G, Vector3 H, float angle, float window_size, Color color) {
     // ABCD-EFGH at system XYZ with center at P = <ABCDEFGH>.
     // A'B'C'D'-E'F'G'H' 
     // projection to plane of center with spheric coordinates K(r, 45°, angle) and normal KP
@@ -48,21 +48,21 @@ void DrawCubeAtAngle(Vector3 A, Vector3 B, Vector3 C, Vector3 D, Vector3 E, Vect
     // DrawCircle(g.x, g.y, 1, RAYWHITE);
     // DrawCircle(h.x, h.y, 1, RAYWHITE);
 
-    DrawLine(a.x, a.y, b.x, b.y, RAYWHITE);
-    DrawLine(a.x, a.y, d.x, d.y, RAYWHITE);
-    DrawLine(a.x, a.y, e.x, e.y, RAYWHITE);
-    DrawLine(b.x, b.y, c.x, c.y, RAYWHITE);
-    DrawLine(b.x, b.y, f.x, f.y, RAYWHITE);
-    DrawLine(c.x, c.y, d.x, d.y, RAYWHITE);
-    DrawLine(c.x, c.y, g.x, g.y, RAYWHITE);
-    DrawLine(d.x, d.y, h.x, h.y, RAYWHITE);
-    DrawLine(e.x, e.y, f.x, f.y, RAYWHITE);
-    DrawLine(e.x, e.y, h.x, h.y, RAYWHITE);
-    DrawLine(f.x, f.y, g.x, g.y, RAYWHITE);
-    DrawLine(g.x, g.y, h.x, h.y, RAYWHITE);
+    DrawLine(a.x, a.y, b.x, b.y, color);
+    DrawLine(a.x, a.y, d.x, d.y, color);
+    DrawLine(a.x, a.y, e.x, e.y, color);
+    DrawLine(b.x, b.y, c.x, c.y, color);
+    DrawLine(b.x, b.y, f.x, f.y, color);
+    DrawLine(c.x, c.y, d.x, d.y, color);
+    DrawLine(c.x, c.y, g.x, g.y, color);
+    DrawLine(d.x, d.y, h.x, h.y, color);
+    DrawLine(e.x, e.y, f.x, f.y, color);
+    DrawLine(e.x, e.y, h.x, h.y, color);
+    DrawLine(f.x, f.y, g.x, g.y, color);
+    DrawLine(g.x, g.y, h.x, h.y, color);
 }
 
-void DrawMeshAtAngle(Vector3 *verteces, int vertex_count, Edge *edges, int edge_count, float angle, float window_size) {
+void DrawMeshAtAngle(Vector3 *verteces, int vertex_count, Edge *edges, int edge_count, float angle, float window_size, Color color) {
 
     Vector3 i = {-1 * sin(angle), cos(angle), 0};
     Vector3 j;
@@ -86,7 +86,7 @@ void DrawMeshAtAngle(Vector3 *verteces, int vertex_count, Edge *edges, int edge_
             points[edges[l].origin].y,
             points[edges[l].dest].x,
             points[edges[l].dest].y,
-            RAYWHITE
+            color
         );
     }
 }

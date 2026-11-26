@@ -1,6 +1,7 @@
 #include "../include/input.h"
+#include <raylib.h>
 
-int ReadMesh(char *argv, Vector3 (*verteces)[256], Edge (*edges)[512], int *v, int *e) {
+int ReadMesh(char *argv, Vector3 **verteces, Edge **edges, int *v, int *e) {
 
     FILE *file = fopen(argv, "r");
 
@@ -43,32 +44,64 @@ int ReadMesh(char *argv, Vector3 (*verteces)[256], Edge (*edges)[512], int *v, i
 int readInputFrom(int argc, char **argv, Data *data) {
 
     if (argc % 2 == 0) {
-        printf("syntax error: mismatched arguments and flags.\n");
+        printf("syntax error: mismatched flags and arguments.\n");
         return 0;
     }
 
     Data temp = {
         NULL,
+        NULL,
         1,
-        0,
-        0,
-        0,
-        1,
-        1,
+        1.0,
+        0.0,
+        0.0,
+        1.0,
         480
     };
 
     for (int i = 1; i < argc; i += 2) {
 
         if (strlen(argv[i]) != 2 || argv[i][0] != '-') {
-            printf("syntax error: unknown flag '%s'.\n", argv[i+1]);
+            printf("syntax error: unknown flag '%s'.\n", argv[i]);
             return 0;
         }
 
         switch (argv[i][1]) {
             case 'm':
                 // mesh: the path to the input file
-                temp.mesh = strdup(argv[i+1]);
+                temp.mesh = malloc(128 * 128 * sizeof(char));
+                char buffer[128];
+
+                int count = 0;
+
+                int v = 0;
+                for (int c = 0;; c++) {
+
+                    if (argv[i+1][c] == '\0') {
+
+                        buffer[v] = '\0';
+                        temp.mesh[count] = strdup(buffer);
+
+                        printf("str%d: %s\n", count, buffer);
+
+                        count++;
+                        break;
+                    }
+
+                    if (*(argv[i+1] + c) == ',') {
+                        buffer[v] = '\0';
+                        temp.mesh[count] = strdup(buffer);
+
+                        count++;
+                        v = 0;
+                    }
+                    else {
+                        buffer[v] = *(argv[i+1] + c);
+                        v++; 
+                    }
+                }
+
+                temp.shape_count = count;
                 break;
 
             case 's':
@@ -88,19 +121,39 @@ int readInputFrom(int argc, char **argv, Data *data) {
                 break;
 
             case 'c':
-                // clone: how many copies of the cube will be displayed 
-                if (sscanf(argv[i+1], "%d", &(temp.clone)) != 1) {
-                    printf("syntax error: unexpected argument type for flag '-c'. expected int.\n");
-                    return 0;
-                }
-                break;
+                // color: color for each mesh 
+                temp.colors = calloc(temp.shape_count, sizeof(Color));
 
-            case 'd':
-                // delta: the variation in starting speed per clone
-                if (sscanf(argv[i+1], "%f", &(temp.delta)) != 1) {
-                    printf("syntax error: unexpected argument type for flag '-d'. expected float.\n");
+                if (strlen(argv[i+1]) < 2 * temp.shape_count - 1) {
+                    printf("syntax error: too few arguments for flag '-c'. arguments must match nmemb at '-m'.\n");
                     return 0;
                 }
+                for (int iter = 0; iter < temp.shape_count; iter++) {
+
+                    if (argv[i+1][2*iter + 1] != '\0' && argv[i+1][1] != ',') {
+                        printf("syntax error: parsing error for flag '-c'. bad separators, use commas.\n");
+                        return 0;
+                    }
+
+                    int color = argv[i+1][2*iter] - '0';
+
+                    if (color < 0 || color > 7) {
+                        printf("syntax error: unexpected argument type for flag '-c'. no such color.\n");
+                        return 0;
+                    }
+
+                    switch (color) {
+                        case 0:     temp.colors[iter] = (Color){205, 214, 244, 255};    break;  // white
+                        case 1:     temp.colors[iter] = (Color){203, 166, 247, 255};    break;  // mauve
+                        case 2:     temp.colors[iter] = (Color){243, 139, 168, 255};    break;  // red
+                        case 3:     temp.colors[iter] = (Color){250, 179, 135, 255};    break;  // peach
+                        case 4:     temp.colors[iter] = (Color){249, 226, 175, 255};    break;  // yellow
+                        case 5:     temp.colors[iter] = (Color){166, 227, 161, 255};    break;  // green
+                        case 6:     temp.colors[iter] = (Color){148, 226, 213, 255};    break;  // teal
+                        case 7:     temp.colors[iter] = (Color){137, 180, 250, 255};    break;  // blue
+                    }
+                }
+
                 break;
 
             case 'p':
@@ -179,7 +232,7 @@ int readInputFrom(int argc, char **argv, Data *data) {
                 break;
 
             default:
-                printf("syntax error: unknown flag '%s'.\n", argv[i+1]);
+                printf("syntax error: unknown flag '%s'.\n", argv[i]);
                 return 0;
                 break;
         }

@@ -6,6 +6,6 @@
 #include "../include/input.h"
 #include "../include/square.h"
 
-int renderCube(Data data, int iter);
+int renderMesh(Data data);
 
 #endif

@@ -10,11 +10,11 @@
 int main(int argc, char **argv) {
 
     Data data;
-    readInputFrom(argc, argv, &data);
-
-    for (int i = 0; i < data.clone; i++) {
-        renderCube(data, i);
+    if (!readInputFrom(argc, argv, &data)) {
+        return 1;
     }
+
+    renderMesh(data);
 
     return 0;
 }
